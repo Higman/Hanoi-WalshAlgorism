@@ -45,7 +45,6 @@ class TowerDrawer(x: Double, y: Double, size: Double, val maxDiskNum: Int) : Gro
 
     private fun relocateDisks() {
         disks.reversed().forEachIndexed { idx, d ->
-            println(idx)
             val diskUnitHeight = sizeProperty.value / (maxDiskNum + 1)
             val baseY = sizeProperty.value - 2 * diskUnitHeight
             d.x = (sizeProperty.value - d.width) / 2.0
