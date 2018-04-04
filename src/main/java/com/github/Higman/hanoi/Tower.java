@@ -1,7 +1,6 @@
 package com.github.Higman.hanoi;
 
-import com.sun.istack.internal.NotNull;
-
+import javax.annotation.Nonnull;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -21,13 +20,13 @@ public class Tower extends HanoiComp implements Cloneable {
         return towerStack.size();
     }
 
-    @NotNull
+    @Nonnull
     public HanoiComp removeFromTop() {
         if ( towerStack.size() < 1 ) { return this; }
         return towerStack.pop();
     }
 
-    @NotNull
+    @Nonnull
     public HanoiComp getTopHanoiComp() {
         if ( towerStack.size() < 1 ) { return this; }
         return towerStack.getFirst();
