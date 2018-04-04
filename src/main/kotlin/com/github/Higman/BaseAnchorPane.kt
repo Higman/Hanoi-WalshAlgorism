@@ -14,7 +14,6 @@ import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.Alert
 
 
-
 class BaseAnchorPane : BorderPane() {
     @FXML
     lateinit var diskSpinner: Spinner<Int>
@@ -24,6 +23,8 @@ class BaseAnchorPane : BorderPane() {
     lateinit var drawPane: Pane
     @FXML
     lateinit var controllButton: Button
+    @FXML
+    lateinit var resetButton: Button
     @FXML
     lateinit var hanoiWalshRadioButton: RadioButton
     @FXML
@@ -56,6 +57,7 @@ class BaseAnchorPane : BorderPane() {
             isStartedHanoi = !isStartedHanoi
             controllButton.text = "次へ"
             drawPane.children.clear()
+            resetButton.isVisible = true
 
             val execAlgorithm = toggleGroup.selectedToggle.userData as Function1<Hanoi, HanoiTowerAlgorithm>
             val hanoi = Hanoi(diskSpinner.value)
@@ -66,9 +68,19 @@ class BaseAnchorPane : BorderPane() {
                 isStartedHanoi = !isStartedHanoi
                 setDisableAllChildren(false)
                 controllButton.text = "開始"
+                resetButton.isVisible = false
                 showFinishAlert()
             }
         }
+    }
+
+    @FXML
+    fun onClickResetlButton(event: ActionEvent) {
+        drawPane.children.clear()
+        isStartedHanoi = false
+        resetButton.isVisible = false
+        setDisableAllChildren(false)
+        controllButton.text = "開始"
     }
 
     private fun showFinishAlert() {
