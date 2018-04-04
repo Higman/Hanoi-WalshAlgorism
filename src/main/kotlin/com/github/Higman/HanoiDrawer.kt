@@ -18,15 +18,15 @@ class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
         pane.children.addAll(towerDrawers.values)
         val rand = Random()
 
-        pane.widthProperty().addListener {e -> resizeMap()}
-        pane.heightProperty().addListener {e -> resizeMap()}
+        pane.widthProperty().addListener { e -> resizeMap() }
+        pane.heightProperty().addListener { e -> resizeMap() }
 
         (algorithm.hanoi.diskNum downTo 1).forEach { n ->
             towerDrawers.get(Hanoi.TowerID.A)?.let {
                 val sizeUnit = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
                 val width = sizeUnit * n
                 val height = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
-                val disk = DiskDrawer(0.0, 0.0, Dimension2D( width, height), n)
+                val disk = DiskDrawer(0.0, 0.0, Dimension2D(width, height), n)
                 disk.fill(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)))
                 it.pushDisk(disk)
             }
@@ -41,7 +41,7 @@ class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
         val movingDisk = towerDrawers.get(mInfo.get().movingSource)?.popDisk()
         movingDisk?.let { towerDrawers.get(mInfo.get().destination)?.pushDisk(it) }
         processList.add(process)
-        return algorithm. hanoi.isFinished
+        return !algorithm.hanoi.isFinished
     }
 
     private fun createMap(): Map<Hanoi.TowerID, TowerDrawer> {
