@@ -10,18 +10,18 @@ buildscript {
 }
 
 group 'com.github.Higman'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
 sourceCompatibility = 1.8
-mainClassName = 'com.github.Higman.GUIEntryPointKt'
+mainClassName = 'com.github.Higman.hanoi.GUIEntryPointKt'
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.github.Higman.GUIEntryPointKt'
+        attributes 'Main-Class': 'com.github.Higman.hanoi.GUIEntryPointKt'
     }
     from {
         configurations.compile.collect {
