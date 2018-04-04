@@ -1,36 +1,36 @@
 package com.github.Higman
 
 import com.github.Higman.hanoi.Hanoi
-import com.github.Higman.hanoi.HanoiWalsh
+import com.github.Higman.hanoi.HanoiAlgorithmComp
+import com.github.Higman.hanoi.HanoiWalshAlgorithm
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.util.*
 
-class HanoiWalshDrawer(val num: Int, val pane: Pane) : HanoiWalsh(Hanoi(num)) {
-    val processList = mutableListOf<() -> Optional<MoveInformation>>()
+class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
+    val processList = mutableListOf<() -> Optional<HanoiAlgorithmComp.MoveInformation>>()
     private val towerDrawers: Map<Hanoi.TowerID, TowerDrawer> by lazy { createMap() }
 
     init {
-        processList.add { firstStep() }
-        processList.add { secondStep() }
+        processList.addAll(algorithm.getSortOperations())
         pane.children.addAll(towerDrawers.values)
         val rand = Random()
 
         pane.widthProperty().addListener {e -> resizeMap()}
         pane.heightProperty().addListener {e -> resizeMap()}
 
-        (1..num).forEach { n ->
+        (1..algorithm.hanoi.diskNum).forEach { n ->
             towerDrawers.get(Hanoi.TowerID.A)?.let {
-                val sizeUnit = it.sizeProperty.value / (num + 1)
+                val sizeUnit = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
                 val width = it.sizeProperty.value - sizeUnit * n
-                val height = it.sizeProperty.value / (num + 1)
+                val height = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
                 val rect = Rectangle(0.0, 0.0, width, height)
                 rect.fill = Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255))
                 it.pushDisk(rect)
             }
         }
-        initialize()
+        algorithm.initialize()
     }
 
     fun next(): Boolean {
@@ -40,7 +40,7 @@ class HanoiWalshDrawer(val num: Int, val pane: Pane) : HanoiWalsh(Hanoi(num)) {
         val movingDisk = towerDrawers.get(mInfo.get().movingSource)?.popDisk()
         movingDisk?.let { towerDrawers.get(mInfo.get().destination)?.pushDisk(it) }
         processList.add(process)
-        return hanoi.isFinished
+        return algorithm. hanoi.isFinished
     }
 
     private fun createMap(): Map<Hanoi.TowerID, TowerDrawer> {
@@ -48,9 +48,9 @@ class HanoiWalshDrawer(val num: Int, val pane: Pane) : HanoiWalsh(Hanoi(num)) {
         val size = pane.width / 3.0 - (interval + interval / 3)
         val baseY = (pane.height - size) / 2.0
         return mapOf(
-                Hanoi.TowerID.A to TowerDrawer(interval, baseY, size, num),
-                Hanoi.TowerID.B to TowerDrawer(interval + (size + interval), baseY, size, num),
-                Hanoi.TowerID.C to TowerDrawer(interval + (size + interval) * 2, baseY, size, num)
+                Hanoi.TowerID.A to TowerDrawer(interval, baseY, size, algorithm.hanoi.diskNum),
+                Hanoi.TowerID.B to TowerDrawer(interval + (size + interval), baseY, size, algorithm.hanoi.diskNum),
+                Hanoi.TowerID.C to TowerDrawer(interval + (size + interval) * 2, baseY, size, algorithm.hanoi.diskNum)
         )
     }
 

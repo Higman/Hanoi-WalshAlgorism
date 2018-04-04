@@ -1,21 +1,24 @@
 package com.github.Higman.hanoi;
 
+import com.github.Higman.DrawableHanoiAlgorithm;
+import kotlin.jvm.functions.Function0;
+import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class HanoiWalsh implements Cloneable {
-    protected Hanoi hanoi;
+public class HanoiWalshAlgorithm extends HanoiAlgorithmComp implements DrawableHanoiAlgorithm {
     private Optional<HanoiWalshParameter> hanoiWalshParameter = Optional.empty();
 
-    public HanoiWalsh(Hanoi hanoi) {
-        this.hanoi = hanoi;
+    public HanoiWalshAlgorithm(Hanoi hanoi) {
+        super(hanoi);
     }
 
     /**
      * ウォルシュアルゴリズムの実行
      */
+    @Override
     public void execHanoi() {
         System.out.println("== Start");
         System.out.println(hanoi);
@@ -49,7 +52,6 @@ public class HanoiWalsh implements Cloneable {
             param.towerIDHavingEvenDisk =getTowerIDHavingEvenDisk(param.towerIDHavingSmallestDisk);
             param.towerIDOfSecondTower = getTowerIDHavingSmallestDisk(param.towerIDHavingSmallestDisk);
             param.towerIDOfOtherTower = getTowerIDOfOtherTower(param.towerIDHavingSmallestDisk, param.towerIDOfSecondTower);
-
         });
     }
 
@@ -105,16 +107,12 @@ public class HanoiWalsh implements Cloneable {
         return Optional.of(mi);
     }
 
+    @Override
     public void initialize() {
         hanoiWalshParameter = Optional.of(new HanoiWalshParameter());
         updateStatusHanoiWalsh();
     }
 
-    private Hanoi.TowerID getTowerIDOfOtherTower(Hanoi.TowerID... excludeTowerIDs) {
-        return Arrays.stream(Hanoi.TowerID.values()).filter(id ->
-                Arrays.stream(excludeTowerIDs).allMatch(excludeID -> id != excludeID)
-        ).findFirst().orElseGet(null);
-    }
 
     private Hanoi.TowerID getTowerIDHavingEvenDisk(Hanoi.TowerID excludeTowerID) {
         Hanoi.TowerInformation towerInfoHavingEvenDisk = null;
@@ -126,27 +124,16 @@ public class HanoiWalsh implements Cloneable {
         return towerInfoHavingEvenDisk.towerID;
     }
 
-    private Hanoi.TowerID getTowerIDHavingSmallestDisk() {
-        Hanoi.TowerID[] searchIDs = Hanoi.TowerID.values();
-        return getTowerIDHavingSmallestDiskComp(searchIDs);
+    @NotNull
+    @Override
+    public List<Function0<Optional<MoveInformation>>> getSortOperations() {
+        return new ArrayList<Function0<Optional<MoveInformation>>>(Arrays.asList(() -> firstStep(), () -> secondStep()));
     }
 
-    private Hanoi.TowerID getTowerIDHavingSmallestDisk(Hanoi.TowerID excludeTowerID) {
-        Hanoi.TowerID[] searchIDs = Arrays.stream(Hanoi.TowerID.values()).filter(id -> id != excludeTowerID).toArray(Hanoi.TowerID[]::new);
-        return getTowerIDHavingSmallestDiskComp(searchIDs);
-    }
-
-    private Hanoi.TowerID getTowerIDHavingSmallestDiskComp(Hanoi.TowerID[] searchIDs) {
-        Hanoi.TowerInformation towerInfoHavingSmallestDisk = hanoi.getInfo(searchIDs[0]);
-        Iterator<Hanoi.TowerID> towerIt = Arrays.stream(searchIDs).iterator();
-        towerIt.next();
-        while ( towerIt.hasNext() ) {
-            Hanoi.TowerInformation tmpInfo = hanoi.getInfo(towerIt.next());
-            if ( tmpInfo.topDisk.size < towerInfoHavingSmallestDisk.topDisk.size ) {
-                towerInfoHavingSmallestDisk = tmpInfo;
-            }
-        }
-        return towerInfoHavingSmallestDisk.towerID;
+    @NotNull
+    @Override
+    public Hanoi getHanoi() {
+        return hanoi;
     }
 
     private class HanoiWalshParameter {
@@ -163,16 +150,6 @@ public class HanoiWalsh implements Cloneable {
         }
 
         public HanoiWalshParameter() {
-        }
-    }
-
-    public class MoveInformation {
-        public Hanoi.TowerID movingSource;
-        public Hanoi.TowerID destination;
-
-        public MoveInformation(Hanoi.TowerID movingSource, Hanoi.TowerID destination) {
-            this.movingSource = movingSource;
-            this.destination = destination;
         }
     }
 }

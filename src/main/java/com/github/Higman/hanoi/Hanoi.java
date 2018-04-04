@@ -78,6 +78,10 @@ public class Hanoi implements Cloneable {
         }
     }
 
+    public int getDiskNum() {
+        return diskNum;
+    }
+
     @Override
     public String toString() {
         String ret = "Hanoi\n";

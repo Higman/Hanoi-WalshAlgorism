@@ -1,7 +1,7 @@
 package com.github.Higman
 
 import com.github.Higman.hanoi.Hanoi
-import com.github.Higman.hanoi.HanoiWalsh
+import com.github.Higman.hanoi.HanoiTowerAlgorithm
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -24,7 +24,7 @@ class BaseAnchorPane : BorderPane(), Initializable {
     @FXML lateinit var controllButton: Button
 
     private var isStartedHanoi = false
-    private lateinit var hanoi: HanoiWalshDrawer
+    private lateinit var hanoiDrawer: HanoiDrawer
 
     init {
         val fxmlLoader: FXMLLoader = FXMLLoader(
@@ -44,9 +44,9 @@ class BaseAnchorPane : BorderPane(), Initializable {
             isStartedHanoi = !isStartedHanoi
             controllButton.text = "次へ"
             drawPane.children.clear()
-            hanoi = HanoiWalshDrawer(diskSpinner.value, drawPane)
+            hanoiDrawer = HanoiDrawer(HanoiTowerAlgorithm(Hanoi(diskSpinner.value)),  drawPane)
         } else {
-            if (hanoi.next()) {
+            if (hanoiDrawer.next()) {
                 isStartedHanoi = !isStartedHanoi
                 controllButton.text = "開始"
             }
