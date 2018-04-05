@@ -2,11 +2,9 @@ package com.github.Higman
 
 import com.github.Higman.hanoi.Hanoi
 import com.github.Higman.hanoi.HanoiAlgorithmComp
-import com.github.Higman.hanoi.HanoiWalshAlgorithm
 import javafx.geometry.Dimension2D
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
 import java.util.*
 
 class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
@@ -21,13 +19,15 @@ class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
         pane.widthProperty().addListener { e -> resizeMap() }
         pane.heightProperty().addListener { e -> resizeMap() }
 
+        val colorStep = 220.0 / (algorithm.hanoi.diskNum - 1)
         (algorithm.hanoi.diskNum downTo 1).forEach { n ->
+            val color = Color.hsb((n - 1) * colorStep, 1.0, 1.0)
             towerDrawers.get(Hanoi.TowerID.A)?.let {
                 val sizeUnit = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
                 val width = sizeUnit * n
                 val height = it.sizeProperty.value / (algorithm.hanoi.diskNum + 1)
                 val disk = DiskDrawer(0.0, 0.0, Dimension2D(width, height), n)
-                disk.fill(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)))
+                disk.fill(color)
                 it.pushDisk(disk)
             }
         }
