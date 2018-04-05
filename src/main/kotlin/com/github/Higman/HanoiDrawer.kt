@@ -49,9 +49,9 @@ class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
         val size = pane.width / 3.0 - (interval + interval / 3)
         val baseY = (pane.height - size) / 2.0
         return mapOf(
-                Hanoi.TowerID.A to TowerDrawer(interval, baseY, size, algorithm.hanoi.diskNum),
-                Hanoi.TowerID.B to TowerDrawer(interval + (size + interval), baseY, size, algorithm.hanoi.diskNum),
-                Hanoi.TowerID.C to TowerDrawer(interval + (size + interval) * 2, baseY, size, algorithm.hanoi.diskNum)
+                Hanoi.TowerID.A to TowerDrawer(interval, baseY, size, algorithm.hanoi.diskNum).apply { label.text = "A(${maxDiskNum+1})" },
+                Hanoi.TowerID.B to TowerDrawer(interval + (size + interval), baseY, size, algorithm.hanoi.diskNum).apply { label.text = "B(${maxDiskNum+2})" },
+                Hanoi.TowerID.C to TowerDrawer(interval + (size + interval) * 2, baseY, size, algorithm.hanoi.diskNum).apply { label.text = "C(${maxDiskNum+3})" }
         )
     }
 

@@ -34,7 +34,7 @@ class DiskDrawer(x: Double, y: Double, size: Dimension2D, val diskNum: Int) : Gr
         val layoutY = (size.height - height) / 2.0
         relocate(layoutX, layoutY)
         setStyle(String.format("-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.7) , 0,0,0,1.6 );"+
-                "-fx-font-size: %dpx;", (sizeProperty.height).toInt())) // フォントサイズの調整
+                "-fx-font-size: %dpx;", (size.height).toInt())) // フォントサイズの調整
     }
 
 
