@@ -14,10 +14,9 @@ class HanoiDrawer(val algorithm: DrawableHanoiAlgorithm, val pane: Pane) {
     init {
         processList.addAll(algorithm.getSortOperations())
         pane.children.addAll(towerDrawers.values)
-        val rand = Random()
 
-        pane.widthProperty().addListener { e -> resizeMap() }
-        pane.heightProperty().addListener { e -> resizeMap() }
+        pane.widthProperty().addListener { _ -> resizeMap() }
+        pane.heightProperty().addListener { _ -> resizeMap() }
 
         val colorStep = 220.0 / (algorithm.hanoi.diskNum - 1)
         (algorithm.hanoi.diskNum downTo 1).forEach { n ->
