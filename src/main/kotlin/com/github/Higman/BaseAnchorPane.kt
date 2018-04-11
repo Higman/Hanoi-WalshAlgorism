@@ -144,11 +144,12 @@ class BaseAnchorPane : BorderPane() {
     }
 
     private fun showFinishAlert() {
-        val alert = Alert(AlertType.INFORMATION)
-        alert.title = "終了"
-        alert.headerText = null
-        alert.contentText = "すべての円盤の移動が完了しました。"
-        alert.show()
+        with(Alert(AlertType.INFORMATION)) {
+            title = "終了"
+            headerText = null
+            contentText = "すべての円盤の移動が完了しました。"
+            show()
+        }
     }
 
     private fun setDisableAllChildren(b: Boolean) {
